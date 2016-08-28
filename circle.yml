@@ -1,0 +1,14 @@
+machine:
+  services:
+    - docker
+dependencies:
+  cache_directories:
+    - "~/docker"
+  override:
+    - docker info
+    - if [[ -e ~/docker/image.tar ]]; then docker load --input ~/docker/image.tar; fi
+    - docker build --tag stefaniuk/python .
+    - mkdir -p ~/docker; docker save stefaniuk/python > ~/docker/image.tar
+test:
+  override:
+    - docker run --interactive -tty stefaniuk/python -c "print('Hello World!')"
