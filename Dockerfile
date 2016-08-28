@@ -1,5 +1,6 @@
 FROM stefaniuk/ubuntu:16.04-20160828
 MAINTAINER daniel.stefaniuk@gmail.com
+# SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
 ENV PYTHON_VERSION="3.6.0a4" \
     PYTHON_DOWNLOAD_URL="https://www.python.org/ftp/python" \
@@ -49,7 +50,7 @@ RUN set -ex \
         && rm /tmp/get-pip.py \
     ; fi \
     && pip3 install --no-cache-dir --upgrade --force-reinstall "pip==$PYTHON_PIP_VERSION" \
-    && [ "$(pip list |tac|tac| awk -F '[ ()]+' '$1 == "pip" { print $2; exit }')" = "$PYTHON_PIP_VERSION" ] \
+    && [ "$(pip list|tac|tac| awk -F '[ ()]+' '$1 == "pip" { print $2; exit }')" = "$PYTHON_PIP_VERSION" ] \
     \
     && find /usr/local -depth \
         \( \
