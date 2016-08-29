@@ -29,7 +29,7 @@ test:
 		--name $(CONTAINER) \
 		--hostname $(CONTAINER) \
 		$(REPOSITORY) \
-		-c "print('Hello World!')"
+		python -c "print('Hello World!')"
 
 purge:
 	@docker rmi $(REPOSITORY) > /dev/null 2>&1 ||:

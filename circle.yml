@@ -11,4 +11,5 @@ dependencies:
     - mkdir -p ~/docker; docker save stefaniuk/python > ~/docker/image.tar
 test:
   override:
-    - docker run --interactive --tty stefaniuk/python -c "print('Hello World!')"
+    - docker run --interactive --tty stefaniuk/python python -c "print('Hello World!')"
+    - docker run --interactive --tty stefaniuk/python ps aux | grep 'user.\+ps aux'

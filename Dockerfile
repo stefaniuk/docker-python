@@ -1,4 +1,4 @@
-FROM stefaniuk/ubuntu:16.04-20160828
+FROM stefaniuk/ubuntu:16.04-20160829
 MAINTAINER daniel.stefaniuk@gmail.com
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
@@ -43,7 +43,6 @@ RUN set -ex \
     && make -j$(nproc) \
     && make install \
     && ldconfig \
-    \
     && if [ ! -e /usr/local/bin/pip3 ]; then : \
         && wget -O /tmp/get-pip.py "$PYTHON_PIP_DOWNLOAD_URL" \
         && python3 /tmp/get-pip.py "pip==$PYTHON_PIP_VERSION" \
@@ -51,7 +50,6 @@ RUN set -ex \
     ; fi \
     && pip3 install --no-cache-dir --upgrade --force-reinstall "pip==$PYTHON_PIP_VERSION" \
     && [ "$(pip list|tac|tac| awk -F '[ ()]+' '$1 == "pip" { print $2; exit }')" = "$PYTHON_PIP_VERSION" ] \
-    \
     && find /usr/local -depth \
         \( \
             \( -type d -a -name test -o -name tests \) \
@@ -59,7 +57,6 @@ RUN set -ex \
             \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
         \) -exec rm -rf '{}' + \
     && rm -rf /usr/src/python ~/.cache \
-    \
     && cd /usr/local/bin \
     && { [ -e easy_install ] || ln -s easy_install-* easy_install; } \
     && ln -s idle3 idle \
@@ -68,6 +65,4 @@ RUN set -ex \
     && ln -s python3-config python-config \
     \
     && apt-get purge --yes --auto-remove $buildDeps \
-    && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
-
-ENTRYPOINT [ "python" ]
+    && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/cache/apt/*
