@@ -12,4 +12,4 @@ dependencies:
 test:
   override:
     - docker run --interactive --tty stefaniuk/python python -c "print('Hello World!')"
-    - docker run --interactive --tty stefaniuk/python ps aux | grep 'user.\+ps aux'
+    - docker run --interactive --tty stefaniuk/python ps aux | grep 'default.\+ps aux'

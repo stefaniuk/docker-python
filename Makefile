@@ -12,14 +12,20 @@ help:
 	@echo
 	@echo "Usage:"
 	@echo
-	@echo "    make build|release|push|test|purge"
+	@echo "    make build|release|push APT_PROXY=url"
+	@echo "    make test"
+	@echo "    make prune"
 	@echo
 
 build:
-	@docker build --tag $(REPOSITORY) --rm .
+	@docker build \
+		--build-arg "APT_PROXY=$(APT_PROXY)" \
+		--tag $(REPOSITORY) --rm .
 
 release: build
-	@docker build --tag $(REPOSITORY):$(shell cat VERSION) --rm .
+	@docker build \
+		--build-arg "APT_PROXY=$(APT_PROXY)" \
+		--tag $(REPOSITORY):$(shell cat VERSION) --rm .
 
 push: release
 	@docker push $(REPOSITORY):$(shell cat VERSION)
@@ -31,5 +37,6 @@ test:
 		$(REPOSITORY) \
 		python -c "print('Hello World!')"
 
-purge:
+prune:
 	@docker rmi $(REPOSITORY) > /dev/null 2>&1 ||:
+	@docker rmi $(REPOSITORY):$(shell cat VERSION) > /dev/null 2>&1 ||:

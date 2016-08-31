@@ -1,7 +1,8 @@
-FROM stefaniuk/ubuntu:16.04-20160829
+FROM stefaniuk/ubuntu:16.04-20160831
 MAINTAINER daniel.stefaniuk@gmail.com
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
+ARG APT_PROXY
 ENV PYTHON_VERSION="3.6.0a4" \
     PYTHON_DOWNLOAD_URL="https://www.python.org/ftp/python" \
     PYTHON_GPG_KEY="0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D" \
@@ -9,6 +10,7 @@ ENV PYTHON_VERSION="3.6.0a4" \
     PYTHON_PIP_DOWNLOAD_URL="https://bootstrap.pypa.io/get-pip.py"
 
 RUN set -ex \
+    \
     && buildDeps=' \
         gcc \
         libbz2-dev \
@@ -24,13 +26,14 @@ RUN set -ex \
         xz-utils \
         zlib1g-dev \
     ' \
+    && if [ -n "$APT_PROXY" ]; then echo "Acquire::http { Proxy \"$APT_PROXY\"; };" >> /etc/apt/apt.conf.d/00proxy; fi \
     && apt-get --yes update \
     && apt-get --yes install $buildDeps \
     \
     && wget -O python.tar.xz "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
     && wget -O python.tar.xz.asc "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$PYTHON_GPG_KEY" \
+    && gpg --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys "$PYTHON_GPG_KEY" \
     && gpg --batch --verify python.tar.xz.asc python.tar.xz \
     && rm -r "$GNUPGHOME" python.tar.xz.asc \
     && mkdir -p /usr/src/python \
@@ -65,4 +68,5 @@ RUN set -ex \
     && ln -s python3-config python-config \
     \
     && apt-get purge --yes --auto-remove $buildDeps \
-    && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/cache/apt/*
+    && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/cache/apt/* \
+    && rm -f /etc/apt/apt.conf.d/00proxy

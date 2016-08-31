@@ -10,7 +10,7 @@ Installation
 
 Automated builds of the image are available on [Docker Hub](https://hub.docker.com/r/stefaniuk/python/).
 
-    docker pull stefaniuk/python:latest
+    docker pull stefaniuk/python
 
 Alternatively you can build the image yourself.
 
