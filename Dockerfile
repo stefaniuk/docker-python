@@ -1,4 +1,4 @@
-FROM stefaniuk/ubuntu:16.04-20160831
+FROM stefaniuk/ubuntu:16.04-20160903
 MAINTAINER daniel.stefaniuk@gmail.com
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
@@ -70,3 +70,16 @@ RUN set -ex \
     && apt-get purge --yes --auto-remove $buildDeps \
     && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/cache/apt/* \
     && rm -f /etc/apt/apt.conf.d/00proxy
+
+### METADATA ###################################################################
+
+ARG VERSION
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VCS_URL
+LABEL \
+    version=$VERSION \
+    build-date=$BUILD_DATE \
+    vcs-ref=$VCS_REF \
+    vcs-url=$VCS_URL \
+    license="MIT"

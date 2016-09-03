@@ -1,10 +1,10 @@
 ifdef GITHUB_ACCOUNT
-	ACCOUNT := $(GITHUB_ACCOUNT)
+	OWNER := $(GITHUB_ACCOUNT)
 else
-	ACCOUNT := $(USER)
+	OWNER := $(USER)
 endif
-CONTAINER := $(subst docker-,,$(shell basename $(shell dirname $(realpath  $(lastword $(MAKEFILE_LIST))))))
-REPOSITORY :=  $(ACCOUNT)/$(CONTAINER)
+NAME := $(subst docker-,,$(shell basename $(shell dirname $(realpath  $(lastword $(MAKEFILE_LIST))))))
+IMAGE :=  $(OWNER)/$(NAME)
 
 all: help
 
@@ -12,31 +12,33 @@ help:
 	@echo
 	@echo "Usage:"
 	@echo
-	@echo "    make build|release|push APT_PROXY=url"
-	@echo "    make test"
-	@echo "    make prune"
+	@echo "    make build|push APT_PROXY=url"
+	@echo "    make test|prune"
 	@echo
 
 build:
 	@docker build \
-		--build-arg "APT_PROXY=$(APT_PROXY)" \
-		--tag $(REPOSITORY) --rm .
+		--build-arg APT_PROXY=${APT_PROXY} \
+		--build-arg VERSION=$(shell cat VERSION) \
+		--build-arg BUILD_DATE=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ") \
+		--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
+		--build-arg VCS_URL=$(shell git config --get remote.origin.url) \
+		--tag $(IMAGE):$(shell cat VERSION) \
+		--rm .
+	@docker tag $(IMAGE):$(shell cat VERSION) $(IMAGE):latest
 
-release: build
-	@docker build \
-		--build-arg "APT_PROXY=$(APT_PROXY)" \
-		--tag $(REPOSITORY):$(shell cat VERSION) --rm .
-
-push: release
-	@docker push $(REPOSITORY):$(shell cat VERSION)
+push:
+	@docker push $(IMAGE):$(shell cat VERSION)
+	@docker push $(IMAGE):latest
+	@curl --request POST "https://hooks.microbadger.com/images/stefaniuk/python/WGY3HIbo8sMfobEaFHawftNkKk0="
 
 test:
 	@docker run --interactive --tty --rm \
-		--name $(CONTAINER) \
-		--hostname $(CONTAINER) \
-		$(REPOSITORY) \
+		--name $(NAME) \
+		--hostname $(NAME) \
+		$(IMAGE) \
 		python -c "print('Hello World!')"
 
 prune:
-	@docker rmi $(REPOSITORY) > /dev/null 2>&1 ||:
-	@docker rmi $(REPOSITORY):$(shell cat VERSION) > /dev/null 2>&1 ||:
+	@docker rmi $(IMAGE):$(shell cat VERSION) > /dev/null 2>&1 ||:
+	@docker rmi $(IMAGE):latest > /dev/null 2>&1 ||:
