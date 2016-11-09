@@ -1,9 +1,10 @@
-FROM stefaniuk/ubuntu:16.04-20160903
+FROM stefaniuk/ubuntu:16.04-20161109
 MAINTAINER daniel.stefaniuk@gmail.com
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
 ARG APT_PROXY
-ENV PYTHON_VERSION="3.6.0a4" \
+ARG APT_PROXY_SSL
+ENV PYTHON_VERSION="3.6.0b3" \
     PYTHON_DOWNLOAD_URL="https://www.python.org/ftp/python" \
     PYTHON_GPG_KEY="0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D" \
     PYTHON_PIP_VERSION="8.1.2" \
@@ -26,7 +27,8 @@ RUN set -ex \
         xz-utils \
         zlib1g-dev \
     ' \
-    && if [ -n "$APT_PROXY" ]; then echo "Acquire::http { Proxy \"$APT_PROXY\"; };" >> /etc/apt/apt.conf.d/00proxy; fi \
+    && if [ -n "$APT_PROXY" ]; then echo "Acquire::http { Proxy \"http://${APT_PROXY}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
+    && if [ -n "$APT_PROXY_SSL" ]; then echo "Acquire::https { Proxy \"https://${APT_PROXY_SSL}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && apt-get --yes update \
     && apt-get --yes install $buildDeps \
     \
