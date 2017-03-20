@@ -1,13 +1,13 @@
-FROM stefaniuk/ubuntu:16.04-20161109
-MAINTAINER daniel.stefaniuk@gmail.com
+FROM stefaniuk/ubuntu:16.04-20170320
+
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
 ARG APT_PROXY
 ARG APT_PROXY_SSL
-ENV PYTHON_VERSION="3.6.0b3" \
+ENV PYTHON_VERSION="3.6.0" \
     PYTHON_DOWNLOAD_URL="https://www.python.org/ftp/python" \
     PYTHON_GPG_KEY="0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D" \
-    PYTHON_PIP_VERSION="8.1.2" \
+    PYTHON_PIP_VERSION="9.0.1" \
     PYTHON_PIP_DOWNLOAD_URL="https://bootstrap.pypa.io/get-pip.py"
 
 RUN set -ex \
@@ -16,6 +16,7 @@ RUN set -ex \
         gcc \
         libbz2-dev \
         libc6-dev \
+        libgdbm-dev \
         liblzma-dev \
         libncurses-dev \
         libreadline-dev \
@@ -24,6 +25,7 @@ RUN set -ex \
         make \
         tcl-dev \
         tk-dev \
+        wget \
         xz-utils \
         zlib1g-dev \
     ' \
