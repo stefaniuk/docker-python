@@ -1,14 +1,16 @@
-FROM stefaniuk/ubuntu:16.04-20170320
+FROM codeworksio/ubuntu:16.04-20170425
 
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
 ARG APT_PROXY
 ARG APT_PROXY_SSL
-ENV PYTHON_VERSION="3.6.0" \
+ENV PYTHON_VERSION="3.6.1" \
     PYTHON_DOWNLOAD_URL="https://www.python.org/ftp/python" \
     PYTHON_GPG_KEY="0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D" \
     PYTHON_PIP_VERSION="9.0.1" \
-    PYTHON_PIP_DOWNLOAD_URL="https://bootstrap.pypa.io/get-pip.py"
+    PYTHON_PIP_DOWNLOAD_URL="https://bootstrap.pypa.io/get-pip.py" \
+    PYTHON_SETUPTOOLS_VERSION="35.0.2" \
+    PYTHON_WHEEL_VERSION="0.29.0"
 
 RUN set -ex \
     \
@@ -32,7 +34,7 @@ RUN set -ex \
     && if [ -n "$APT_PROXY" ]; then echo "Acquire::http { Proxy \"http://${APT_PROXY}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && if [ -n "$APT_PROXY_SSL" ]; then echo "Acquire::https { Proxy \"https://${APT_PROXY_SSL}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && apt-get --yes update \
-    && apt-get --yes install $buildDeps \
+    && apt-get --yes --no-install-recommends install $buildDeps \
     \
     && wget -O python.tar.xz "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
     && wget -O python.tar.xz.asc "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
@@ -55,8 +57,11 @@ RUN set -ex \
         && python3 /tmp/get-pip.py "pip==$PYTHON_PIP_VERSION" \
         && rm /tmp/get-pip.py \
     ; fi \
-    && pip3 install --no-cache-dir --upgrade --force-reinstall "pip==$PYTHON_PIP_VERSION" \
-    && [ "$(pip list|tac|tac| awk -F '[ ()]+' '$1 == "pip" { print $2; exit }')" = "$PYTHON_PIP_VERSION" ] \
+    && pip3 install --no-cache-dir --upgrade --force-reinstall \
+        "pip==$PYTHON_PIP_VERSION" \
+        "setuptools==$PYTHON_SETUPTOOLS_VERSION" \
+        "wheel==$PYTHON_WHEEL_VERSION" \
+    \
     && find /usr/local -depth \
         \( \
             \( -type d -a -name test -o -name tests \) \
