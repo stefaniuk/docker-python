@@ -7,9 +7,9 @@ dependencies:
   override:
     - docker info
     - if [[ -e ~/docker/image.tar ]]; then docker load --input ~/docker/image.tar; fi
-    - docker build --tag stefaniuk/python .
-    - mkdir -p ~/docker; docker save stefaniuk/python > ~/docker/image.tar
+    - docker build --tag codeworksio/python .
+    - mkdir -p ~/docker; docker save codeworksio/python > ~/docker/image.tar
 test:
   override:
-    - docker run --interactive --tty stefaniuk/python python -c "print('Hello World!')"
-    - docker run --interactive --tty stefaniuk/python ps aux | grep 'default.\+ps aux'
+    - docker run --interactive --tty codeworksio/python python -c "print('Hello World!')"
+    - docker run --interactive --tty codeworksio/python ps aux | grep 'default.\+ps aux'

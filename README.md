@@ -1,21 +1,21 @@
-[![Circle CI](https://circleci.com/gh/stefaniuk/docker-python.svg?style=shield "CircleCI")](https://circleci.com/gh/stefaniuk/docker-python)&nbsp;[![Size](https://images.microbadger.com/badges/image/stefaniuk/python.svg)](http://microbadger.com/images/stefaniuk/python)&nbsp;[![Version](https://images.microbadger.com/badges/version/stefaniuk/python.svg)](http://microbadger.com/images/stefaniuk/python)&nbsp;[![Commit](https://images.microbadger.com/badges/commit/stefaniuk/python.svg)](http://microbadger.com/images/stefaniuk/python)&nbsp;[![Docker Hub](https://img.shields.io/docker/pulls/stefaniuk/python.svg)](https://hub.docker.com/r/stefaniuk/python/)
+[![Circle CI](https://circleci.com/gh/codeworksio/docker-python.svg?style=shield "CircleCI")](https://circleci.com/gh/codeworksio/docker-python)&nbsp;[![Size](https://images.microbadger.com/badges/image/codeworksio/python.svg)](http://microbadger.com/images/codeworksio/python)&nbsp;[![Version](https://images.microbadger.com/badges/version/codeworksio/python.svg)](http://microbadger.com/images/codeworksio/python)&nbsp;[![Commit](https://images.microbadger.com/badges/commit/codeworksio/python.svg)](http://microbadger.com/images/codeworksio/python)&nbsp;[![Docker Hub](https://img.shields.io/docker/pulls/codeworksio/python.svg)](https://hub.docker.com/r/codeworksio/python/)
 
 Docker Python
 =============
 
-My customised Python baseimage.
+Customised Python base image.
 
 Installation
 ------------
 
-Builds of the image are available on [Docker Hub](https://hub.docker.com/r/stefaniuk/python/).
+Builds of the image are available on [Docker Hub](https://hub.docker.com/r/codeworksio/python/).
 
-    docker pull stefaniuk/python
+    docker pull codeworksio/python
 
 Alternatively you can build the image yourself.
 
-    docker build --tag stefaniuk/python \
-        github.com/stefaniuk/docker-python
+    docker build --tag codeworksio/python \
+        github.com/codeworksio/docker-python
 
 Testing
 -------
