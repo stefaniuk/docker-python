@@ -7,7 +7,7 @@ help:
 	echo
 	echo "Usage:"
 	echo
-	echo "    make build|create|start|stop|log|test|bash|clean|remove|push [APT_PROXY|APT_PROXY_SSL=ip:port]"
+	echo "    make build|start|stop|log|test|bash|clean|remove|push [APT_PROXY|APT_PROXY_SSL=ip:port]"
 	echo
 
 build:
@@ -23,17 +23,14 @@ build:
 	docker tag $(IMAGE):$(shell cat VERSION) $(IMAGE):latest
 	docker rmi --force $$(docker images | grep "<none>" | awk '{ print $$3 }') 2> /dev/null ||:
 
-create:
+start:
 	docker stop $(IMAGE) > /dev/null 2>&1 ||:
 	docker rm $(IMAGE) > /dev/null 2>&1 ||:
-	docker create --interactive --tty \
+	docker run --detach --interactive --tty \
 		--name $(NAME) \
 		--hostname $(NAME) \
 		$(IMAGE) \
 		/bin/bash --login
-
-start:
-	docker start $(NAME)
 
 stop:
 	docker stop $(NAME)
@@ -43,7 +40,7 @@ log:
 
 test:
 	docker exec --interactive --tty \
-		--user "default" \
+		--user "ubuntu" \
 		$(NAME) \
 		python -c "print('Hello World!')"
 

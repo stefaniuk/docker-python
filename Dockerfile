@@ -1,4 +1,4 @@
-FROM codeworksio/ubuntu:16.04-20170425
+FROM codeworksio/ubuntu:latest
 
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
