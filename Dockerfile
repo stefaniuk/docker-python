@@ -1,4 +1,4 @@
-FROM codeworksio/ubuntu:latest
+FROM codeworksio/ubuntu:16.04-20170605
 
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
@@ -34,7 +34,7 @@ RUN set -ex \
     && if [ -n "$APT_PROXY" ]; then echo "Acquire::http { Proxy \"http://${APT_PROXY}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && if [ -n "$APT_PROXY_SSL" ]; then echo "Acquire::https { Proxy \"https://${APT_PROXY_SSL}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && apt-get --yes update \
-    && apt-get --yes --no-install-recommends install $buildDeps \
+    && apt-get --yes install $buildDeps \
     \
     && wget -O python.tar.xz "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
     && wget -O python.tar.xz.asc "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
