@@ -81,6 +81,8 @@ RUN set -ex \
     && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/cache/apt/* \
     && rm -f /etc/apt/apt.conf.d/00proxy
 
+ONBUILD COPY assets/ /
+
 ### METADATA ###################################################################
 
 ARG VERSION
