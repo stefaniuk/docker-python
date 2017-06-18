@@ -1,4 +1,4 @@
-FROM codeworksio/ubuntu:16.04-20170615
+FROM codeworksio/ubuntu:16.04-20170618
 
 # SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
 
@@ -80,8 +80,6 @@ RUN set -ex \
     && apt-get purge --yes --auto-remove $buildDeps \
     && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/cache/apt/* \
     && rm -f /etc/apt/apt.conf.d/00proxy
-
-ONBUILD COPY assets/ /
 
 ### METADATA ###################################################################
 
