@@ -14,7 +14,7 @@ ENV PYTHON_VERSION="3.6.1" \
 
 RUN set -ex \
     \
-    && buildDeps=' \
+    && buildDependencies="\
         gcc \
         libbz2-dev \
         libc6-dev \
@@ -30,12 +30,12 @@ RUN set -ex \
         wget \
         xz-utils \
         zlib1g-dev \
-    ' \
+    " \
     && if [ -n "$APT_PROXY" ]; then echo "Acquire::http { Proxy \"http://${APT_PROXY}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && if [ -n "$APT_PROXY_SSL" ]; then echo "Acquire::https { Proxy \"https://${APT_PROXY_SSL}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && apt-get --yes update \
     && apt-get --yes install \
-        $buildDeps \
+        $buildDependencies \
     \
     && wget -O python.tar.xz "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
     && wget -O python.tar.xz.asc "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
@@ -77,7 +77,7 @@ RUN set -ex \
     && ln -s python3 python \
     && ln -s python3-config python-config \
     \
-    && apt-get purge --yes --auto-remove $buildDeps \
+    && apt-get purge --yes --auto-remove $buildDependencies \
     && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/cache/apt/* \
     && rm -f /etc/apt/apt.conf.d/00proxy
 
