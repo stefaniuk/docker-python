@@ -30,6 +30,7 @@ start:
 	docker run --detach --interactive --tty \
 		--name $(NAME) \
 		--hostname $(NAME) \
+		--env "INIT_DEBUG=true" \
 		$(IMAGE) \
 		/bin/bash --login
 
