@@ -1,16 +1,14 @@
-FROM codeworksio/ubuntu:16.04-20170619
+FROM codeworksio/ubuntu:16.04-20180120
 
-# SEE: https://github.com/docker-library/python/blob/master/3.6/slim/Dockerfile
+# SEE: https://github.com/docker-library/python/blob/master/3.6/alpine3.6/Dockerfile
 
 ARG APT_PROXY
 ARG APT_PROXY_SSL
-ENV PYTHON_VERSION="3.6.1" \
+ENV PYTHON_VERSION="3.6.4" \
     PYTHON_DOWNLOAD_URL="https://www.python.org/ftp/python" \
     PYTHON_GPG_KEY="0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D" \
     PYTHON_PIP_VERSION="9.0.1" \
-    PYTHON_PIP_DOWNLOAD_URL="https://bootstrap.pypa.io/get-pip.py" \
-    PYTHON_SETUPTOOLS_VERSION="35.0.2" \
-    PYTHON_WHEEL_VERSION="0.29.0"
+    PYTHON_PIP_DOWNLOAD_URL="https://bootstrap.pypa.io/get-pip.py"
 
 RUN set -ex \
     \
@@ -60,8 +58,6 @@ RUN set -ex \
     ; fi \
     && pip3 install --no-cache-dir --upgrade --force-reinstall \
         "pip==$PYTHON_PIP_VERSION" \
-        "setuptools==$PYTHON_SETUPTOOLS_VERSION" \
-        "wheel==$PYTHON_WHEEL_VERSION" \
     \
     && find /usr/local -depth \
         \( \
@@ -83,13 +79,15 @@ RUN set -ex \
 
 ### METADATA ###################################################################
 
-ARG VERSION
+ARG IMAGE
 ARG BUILD_DATE
+ARG VERSION
 ARG VCS_REF
 ARG VCS_URL
 LABEL \
-    version=$VERSION \
-    build-date=$BUILD_DATE \
-    vcs-ref=$VCS_REF \
-    vcs-url=$VCS_URL \
-    license="MIT"
+    org.label-schema.name=$IMAGE \
+    org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.version=$VERSION \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-url=$VCS_URL \
+    org.label-schema.schema-version="1.0"
