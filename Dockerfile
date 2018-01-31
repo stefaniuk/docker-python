@@ -1,4 +1,4 @@
-FROM codeworksio/ubuntu:16.04-20180130
+FROM codeworksio/ubuntu:16.04-20180131
 
 # SEE: https://github.com/docker-library/python/blob/master/3.6/stretch/Dockerfile
 
