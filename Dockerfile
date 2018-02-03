@@ -14,27 +14,15 @@ RUN set -ex \
     \
     && buildDependencies="\
         gcc \
-        libbz2-dev \
-        libc6-dev \
-        libgdbm-dev \
-        liblzma-dev \
-        libncurses-dev \
-        libreadline-dev \
-        libsqlite3-dev \
         libssl-dev \
-        make \
         tcl-dev \
         tk-dev \
-        wget \
-        xz-utils \
-        zlib1g-dev \
     " \
     && if [ -n "$APT_PROXY" ]; then echo "Acquire::http { Proxy \"http://${APT_PROXY}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && if [ -n "$APT_PROXY_SSL" ]; then echo "Acquire::https { Proxy \"https://${APT_PROXY_SSL}\"; };" > /etc/apt/apt.conf.d/00proxy; fi \
     && apt-get --yes update \
     && apt-get --yes install \
         $buildDependencies \
-        libexpat-dev \
     \
     && curl -L "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" -o python.tar.xz \
     && curl -L "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" -o python.tar.xz.asc \
@@ -49,8 +37,6 @@ RUN set -ex \
     && ./configure \
         --enable-loadable-sqlite-extensions \
         --enable-shared \
-        --with-system-expat \
-        --with-system-ffi \
         --without-ensurepip \
     && make -j$(nproc) \
     && make install \
