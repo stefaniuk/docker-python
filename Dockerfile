@@ -34,6 +34,7 @@ RUN set -ex \
     && apt-get --yes update \
     && apt-get --yes install \
         $buildDependencies \
+        libexpat-dev \
     \
     && curl -L "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" -o python.tar.xz \
     && curl -L "$PYTHON_DOWNLOAD_URL/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" -o python.tar.xz.asc \
