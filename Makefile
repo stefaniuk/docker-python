@@ -42,12 +42,13 @@ log:
 
 test:
 	docker exec --interactive --tty \
-		--user "ubuntu" \
+		--user ubuntu \
 		$(NAME) \
 		python -c "print('Hello World!')"
 
 bash:
 	docker exec --interactive --tty \
+		--user root \
 		$(NAME) \
 		/bin/bash --login ||:
 

@@ -21,3 +21,4 @@ Testing
 -------
 
     make build start test
+    make stop
