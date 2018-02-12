@@ -1,15 +1,9 @@
 machine:
   services:
     - docker
-dependencies:
-  cache_directories:
-    - "~/docker"
-  override:
-    - docker info
-    - if [[ -e ~/docker/image.tar ]]; then docker load --input ~/docker/image.tar; fi
-    - docker build --tag codeworksio/python .
-    - mkdir -p ~/docker; docker save codeworksio/python > ~/docker/image.tar
 test:
   override:
-    - docker run --interactive --tty codeworksio/python python -c "print('Hello World!')"
-    - docker run --interactive --tty codeworksio/python ps aux | grep 'ubuntu.\+ps aux'
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - make build
+    - make test
+    - make push

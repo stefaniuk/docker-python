@@ -41,10 +41,10 @@ log:
 	docker logs --follow $(NAME)
 
 test:
-	docker exec --interactive --tty \
-		--user ubuntu \
-		$(NAME) \
+	docker run --interactive --tty --rm codeworksio/python \
 		python -c "print('Hello World!')"
+	docker run --interactive --tty --rm codeworksio/python \
+		ps aux | grep 'ubuntu.\+ps aux'
 
 bash:
 	docker exec --interactive --tty \
@@ -59,6 +59,7 @@ clean:
 push:
 	docker push $(IMAGE):$(shell cat VERSION)
 	docker push $(IMAGE):latest
+	sleep 10
 	curl --request POST "https://hooks.microbadger.com/images/$(IMAGE)/WY5PNBLSYOl5lOIKzjdgs9aH8_M="
 
 .SILENT:
