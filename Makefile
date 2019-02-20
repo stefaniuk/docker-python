@@ -42,9 +42,11 @@ log:
 
 test:
 	docker run --interactive --tty --rm codeworksio/python \
-		python -c "print('Hello World!')"
-	docker run --interactive --tty --rm codeworksio/python \
 		ps aux | grep 'default.\+ps aux'
+	docker run --interactive --tty --rm codeworksio/python \
+		python -c "print('Hello World!')"
+	docker run --interactive --tty --rm --volume $(shell pwd)/assets/tmp:/tmp codeworksio/python \
+		python /tmp/HelloWorld.py
 
 bash:
 	docker exec --interactive --tty \
